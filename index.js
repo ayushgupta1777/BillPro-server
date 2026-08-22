@@ -96,11 +96,12 @@ app.post('/api/sync/customer', async (req, res) => {
   try {
     await dbConnect();
     const data = req.body;
-    await Customer.findOneAndUpdate({ id: data.id }, data, { upsert: true, new: true });
-    res.status(200).json({ success: true, id: data.id });
+    const id = String(data.id);
+    await Customer.findOneAndUpdate({ id: id }, data, { upsert: true, new: true });
+    res.status(200).json({ success: true, id: id });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Sync failed due to an internal server error." });
   }
 });
 
@@ -108,11 +109,12 @@ app.post('/api/sync/item', async (req, res) => {
   try {
     await dbConnect();
     const data = req.body;
-    await Item.findOneAndUpdate({ id: data.id }, data, { upsert: true, new: true });
-    res.status(200).json({ success: true, id: data.id });
+    const id = String(data.id);
+    await Item.findOneAndUpdate({ id: id }, data, { upsert: true, new: true });
+    res.status(200).json({ success: true, id: id });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Sync failed due to an internal server error." });
   }
 });
 
@@ -125,11 +127,12 @@ app.post('/api/sync/bill', async (req, res) => {
       ...data.bill,
       items: data.items
     };
-    await Bill.findOneAndUpdate({ id: billDocument.id }, billDocument, { upsert: true, new: true });
-    res.status(200).json({ success: true, id: billDocument.id });
+    const id = String(billDocument.id);
+    await Bill.findOneAndUpdate({ id: id }, billDocument, { upsert: true, new: true });
+    res.status(200).json({ success: true, id: id });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Sync failed due to an internal server error." });
   }
 });
 
