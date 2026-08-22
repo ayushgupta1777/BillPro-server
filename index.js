@@ -25,17 +25,16 @@ app.use(cors({
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  console.error("MONGODB_URI is not defined in .env");
-  process.exit(1);
-}
 
 // Serverless Connection Caching
 let cachedDb = null;
 
 async function dbConnect() {
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI environment variable is missing.");
+  }
+  
   if (cachedDb) return cachedDb;
   const db = await mongoose.connect(MONGODB_URI);
   cachedDb = db;
